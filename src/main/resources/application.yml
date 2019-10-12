@@ -1,0 +1,47 @@
+zuul:  
+  sensitiveHeaders: Cookie,Set-Cookie
+  add-host-header: true
+  routes:
+    contracts:
+      path: /contracts/**
+      service-id: contract
+      strip-prefix: false
+      
+    subscriptions:
+      path: /subscriptions/**
+      service-id: contract
+      strip-prefix: false
+    auth:
+      path: /auth/**
+      url: http://localhost:9999/auth
+
+security:
+  oauth2:
+    client:
+      client-id: levantu
+      client-secret: 839027a5-3670-497c-a2c4-d09951d7fedb
+      authorized-grant-types:
+      - password
+      - authorization_code
+      - refresh_token
+      - implicit
+      auto-approve-scopes:
+      - soba-api
+      scope:
+      - soba-api
+      clientAuthenticationScheme: form
+      accessTokenUri: https://id.acb.com.vn/auth/realms/soba/protocol/openid-connect/token
+      userAuthorizationUri: https://id.acb.com.vn/auth/realms/soba/protocol/openid-connect/auth
+    resource:
+      userInfoUri: https://id.acb.com.vn/auth/realms/soba/protocol/openid-connect/userinfo
+server:
+  port: 8080
+spring:
+  application:
+    name: zuul
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
+  instance:
+    preferIpAddress: true
